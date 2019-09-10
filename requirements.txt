@@ -1,0 +1,6 @@
+Flask
+pandas
+numpy
+pandas_datareader
+sklearn
+matplotlib

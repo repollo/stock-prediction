@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-US" class="gr__chartjs_org"><head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>App</title>
+	<link rel="stylesheet" type="text/css" href="static/css/style.css">
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+	<!-- Styles -->
+	<style>
+		body { background-color: #30303d; color: #fff; }
+		#chartdiv {
+		  width: 100%;
+		  height: 500px;
+		}
+	</style>
+</head>
+<body data-gr-c-s-loaded="true">
+	<script type="text/javascript">
+		$(window).load(function(){
+			if ( $('#start')[0].type != 'date' ) $('#start').datepicker();
+			if ( $('#end')[0].type != 'date' ) $('#end').datepicker();
+		});
+	</script>
+	<div>
+		<form method="POST" action="/data" role="form" id="form">
+			<div class="form-group">
+				<label class="sr-only">Enter a Stock Symbol</label>
+				<input type="text" name="search" placeholder="eg. aapl..." required>
+				<select name="sourcery">
+				  <option value="yahoo">Yahoo Finance</option>
+				</select>
+				<div>
+					<label for="start">Start date:</label>
+
+					<input type="date" id="start" name="trip-start"
+					       value=""
+					       min="1970-01-01" max="2019-12-31" required>
+				</div>
+				<div>
+					<label for="end">End date:</label>
+
+					<input type="date" id="end" name="trip-end"
+					       value=""
+					       min="1970-01-01" max="2019-12-31" required>
+				</div>
+				<input type="submit" value="Submit">
+			</div>
+		</form>
+	</div> 
+	</body>
+</html>
