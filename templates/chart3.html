@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Hooli Stock Analyzer App</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="static/css/style5.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+<!-- Resources -->
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    <style>
+		body { background-color: #30303d; color: #fff; }
+		#chartdiv {
+		  width: 100%;
+		  height: 500px;
+		}
+	</style>
+
+<!-- Chart code -->
+        <script>
+        am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_dark);
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+        var data = [];
+        let dates = {{ stock_date|tojson|safe }};
+        let values = {{ stock_data|tojson|safe }};
+        let regs = {{reg|tojson|safe}};
+        let pol2s = {{pol2|tojson|safe}};
+        let pol3s = {{pol3|tojson|safe}};
+        let knns = {{knn|tojson|safe}};
+        let lass = {{las|tojson|safe}};
+        let byrs = {{byr|tojson|safe}};
+        let lars = {{lar|tojson|safe}};
+        let omps = {{omp|tojson|safe}};
+        let ards = {{ard|tojson|safe}};
+        let sgds = {{sgd|tojson|safe}};
+
+
+        for(let i = 0; i < dates.length; i++){
+          let date = dates[i];
+          let datas = values[i];
+          let reg = regs[i];
+          let pol2 = pol2s[i];
+          let pol3 = pol3s[i];
+          let knn = knns[i];
+          let las = lass[i];
+          let byr = byrs[i];
+          let lar = lars[i];
+          let omp = omps[i];
+          let ard = ards[i];
+          let sgd = sgds[i];
+          data.push({date:date,data:datas,reg:reg,pol2:pol2,pol3:pol3,knn:knn,las:las,byr:byr,lar:lar,omp:omp,ard:ard,sgd:sgd});
+        }
+
+        chart.data = data;
+
+        // Create axes
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 60;
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+        // Create series
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.legendSettings.labelText = "[bold][red]Stock Price[/]";
+        series.dataFields.valueY = "data";
+        series.dataFields.dateX = "date";
+        // series.connect = false;
+        series.tooltipText = "{value}"
+
+        var series1 = chart.series.push(new am4charts.LineSeries());
+        series1.legendSettings.labelText = "[bold][red]Linear Regression Prediction[/]";
+        series1.dataFields.valueY = "reg";
+        series1.dataFields.dateX = "date";
+        // series1.connect = false;
+        series1.tooltipText = "{value}"
+
+        var series2 = chart.series.push(new am4charts.LineSeries());
+        series2.legendSettings.labelText = "[bold][red]Quadratic Regression 2[/]";
+        series2.dataFields.valueY = "pol2";
+        series2.dataFields.dateX = "date";
+        // series2.connect = false;
+        series2.tooltipText = "{value}"
+
+        var series3 = chart.series.push(new am4charts.LineSeries());
+        series3.legendSettings.labelText = "[bold][red]Quadratic Regression 3[/]";
+        series3.dataFields.valueY = "pol3";
+        series3.dataFields.dateX = "date";
+        // series3.connect = false;
+        series3.tooltipText = "{value}"
+
+        var series4 = chart.series.push(new am4charts.LineSeries());
+        series4.legendSettings.labelText = "[bold][red]K-Nearest Neighbors Regression[/]";
+        series4.dataFields.valueY = "knn";
+        series4.dataFields.dateX = "date";
+        // series4.connect = false;
+        series4.tooltipText = "{value}"
+
+        var series5 = chart.series.push(new am4charts.LineSeries());
+        series5.legendSettings.labelText = "[bold][red]Lasso Regression[/]";
+        series5.dataFields.valueY = "las";
+        series5.dataFields.dateX = "date";
+        // series5.connect = false;
+        series5.tooltipText = "{value}"
+
+        var series6 = chart.series.push(new am4charts.LineSeries());
+        series6.legendSettings.labelText = "[bold][red]Bayesian Ridge Regression[/]";
+        series6.dataFields.valueY = "byr";
+        series6.dataFields.dateX = "date";
+        // series6.connect = false;
+        series6.tooltipText = "{value}"
+
+        var series7 = chart.series.push(new am4charts.LineSeries());
+        series7.legendSettings.labelText = "[bold][red]Lasso Least Angle Regression[/]";
+        series7.dataFields.valueY = "lar";
+        series7.dataFields.dateX = "date";
+        // series7.connect = false;
+        series7.tooltipText = "{value}"
+
+        var series8 = chart.series.push(new am4charts.LineSeries());
+        series8.legendSettings.labelText = "[bold][red]Orthogonal Matching Pursuit Regression[/]";
+        series8.dataFields.valueY = "omp";
+        series8.dataFields.dateX = "date";
+        // series8.connect = false;
+        series8.tooltipText = "{value}"
+
+        var series9 = chart.series.push(new am4charts.LineSeries());
+        series9.legendSettings.labelText = "[bold][red]Automatic Relevance Determination Regression[/]";
+        series9.dataFields.valueY = "ard";
+        series9.dataFields.dateX = "date";
+        // series9.connect = false;
+        series9.tooltipText = "{value}"
+
+        var series10 = chart.series.push(new am4charts.LineSeries());
+        series10.legendSettings.labelText = "[bold][red]Stochastic Gradient Descent Regression[/]";
+        series10.dataFields.valueY = "sgd";
+        series10.dataFields.dateX = "date";
+        // series10.connect = false;
+        series10.tooltipText = "{value}"
+
+        series.tooltip.pointerOrientation = "vertical";
+
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.snapToSeries = series;
+        chart.cursor.xAxis = dateAxis;
+
+        chart.legend = new am4charts.Legend();
+        var marker = chart.legend.markers.template.children.getIndex(0);
+        marker.cornerRadius(12, 12, 12, 12);
+        marker.strokeWidth = 2;
+        marker.strokeOpacity = 1;
+        marker.stroke = am4core.color("#ccc");
+
+        //chart.scrollbarY = new am4core.Scrollbar();
+        chart.scrollbarX = new am4core.Scrollbar();
+
+        }); // end am4core.ready()
+        </script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3><a href="/">Hooli Stock Home</a></h3>
+            </div>
+            <ul class="list-unstyled components">
+                <p>Graph Selection:</p>
+                <li>
+                    <a href="/chart1">Stock Price with Moving Average</a>
+                </li>
+                <li>
+                    <a href="/chart2">Returns Deviation</a>
+                   </li>
+                   <li class="active">
+                    <a href="/chart3">Stock Predictions</a>
+                </li>
+                <!-- <li>
+                    <a href="/chart4">Chart 4</a>
+                </li>
+                <li>
+                    <a href="/chart5">Chart 5</a>
+                </li>
+                <li>
+                    <a href="/chart6">Chart 6</a>
+                </li>
+                <li>
+                    <a href="/chart7">Chart 7</a>
+                </li> -->
+            </ul>
+            <ul class="list-unstyled">
+                <li>
+                    <a href="https://nori-labs.com"><img class="icon" src="static/img/logo-hooli-top.svg" width="200">
+                        <h3 style="font-style: italic;">"I don't know about you people, but I don't want to live in a world where someone else makes the world a better place better than we do."</h3></a>
+                </li>
+            </ul>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div style="position:absolute; bottom:30px; float:none; width:inherit;">
+                            <footer style="position:relative; bottom: 0; height:40px; width: 250px;">
+                                <font color="white">
+          <p style="color: white;">Made with ❤ by <a href="https://www.github.com/repollo">@repollo</a> from <a href="https://www.nori-labs.com">norilabs</a></p>
+          </font>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <form method="POST" action="/data" role="form" id="form" s>
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <label class="sr-only">Enter Stock Symbol</label>
+                                    <input type="text" name="search" placeholder="Eg. aapl" required />
+                                </li>
+                                <li class="nav-item">
+                                    <select name="sourcery">
+                                        <option value="yahoo">Yahoo Finance</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item">
+                                    <script type="text/javascript">
+                                        $(window).load(function() {
+                                            if ($('#start')[0].type != 'date') $('#start').datepicker();
+                                            if ($('#end')[0].type != 'date') $('#end').datepicker();
+                                        });
+                                    </script>
+                                    <label for="start">Start date:</label>
+                                    <input type="date" id="start" name="trip-start" value="{{start}}" min="1970-01-01" max="2019-12-31" required />
+                                    <label for="end">End date:</label>
+                                    <input type="date" id="end" name="trip-end" value="{{end}}" min="1970-01-01" max="2019-12-31" required />
+                                </li>
+                                <li class="nav-item">
+                                    <input type="submit" value="Submit">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+            <h2>{{company}} Stock Predictions</h2>
+            <div>
+                <br>
+            <p>This is an interactive view of the data using AmCharts. You can zoom in and play around the graph. However needs a little bit more work with the graph to actually be useful...</p>
+
+            <div class="line"></div>
+            </div>
+            <div class="centered-element" id="chartdiv" style="width:85%; height:700px;"></div>
+
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

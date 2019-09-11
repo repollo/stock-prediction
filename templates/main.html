@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html>
-<title>App</title>
+<head>
+<title>Hooli Stock App</title>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
 <link rel="stylesheet" href="static/css/w3.css">
+<link rel="stylesheet" type="text/css" href="static/css/style.css">
+
 <link href="static/css/hooli.css" rel="stylesheet">
 <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+<!-- Styles -->
+<style>
+    body {
+        background-color: #30303d;
+        color: #fff;
+    }
+    
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+</head>
 <section class="app__hero">
     <video class="app__hero__video" src="static/videos/hooli-intro-lg.mp4" loop="" autoplay="" muted=""></video>
     <div>
         <div class="row align-middle">
             <div>
-                <div class="columns medium-12"><img src="http://127.0.0.1:5000/static/img/logo-hooli-top.svg" alt="Logo" width="200">
+                <div class="columns medium-12"><img src="static/img/logo-hooli-top.svg" alt="Logo" width="200">
                     <h1 class="app__hero__title">Making the world a better place with one stock at time. </h1></div>
 
                 <script type="text/javascript">
@@ -25,10 +48,12 @@
                     <form method="POST" action="/data" role="form" id="form">
                         <div class="form-group">
                             <label class="sr-only">Enter a Stock Symbol</label>
-                            <input type="text" name="search" placeholder="eg. aapl..." required>
+                            <input type="text" name="search" placeholder="Symbol: eg. aapl..." required />
+                            <div>
                             <select name="sourcery">
                                 <option value="yahoo">Yahoo Finance</option>
                             </select>
+                            </div>
                             <div>
                                 <label for="start">Start date:</label>
 
@@ -51,7 +76,6 @@
 <footer class="w3-container w3-black w3-center">
     <p>Made with ❤ by <a href="https://www.github.com/repollo" target="_blank">@repollo</a> from <a href="https://www.nori-labs.com" target="_blank">norilabs</a></p>
 </footer>
-
 </body>
 
 </html>

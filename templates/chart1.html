@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Hooli Stock Analyzer App</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="static/css/style5.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+<!-- Resources -->
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <style>
+        body { background-color: #30303d; color: #fff; }
+        #chartdiv {
+          width: 100%;
+          height: 500px;
+        }
+    </style>
+
+<!-- Chart code -->
+        <script>
+        am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_dark);
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+        var data = [];
+        let dates = {{ stock_date|tojson|safe }};
+        let closes = {{ stock_data|tojson|safe }};
+        let mavg = {{ mav|tojson|safe }};
+
+
+        for(let i = 0; i < dates.length; i++){
+          let date = dates[i];
+          let value = closes[i];
+          let mav = mavg[i];
+          data.push({date:date,value:value, mav:mav});
+        }
+
+        console.log(data)
+        chart.data = data;
+
+        // Create axes
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 60;
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+        // Create series
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.stroke = am4core.color("#ff0000");
+        series.legendSettings.labelText = "[bold][red]Adj Close[/]";
+        series.dataFields.valueY = "value";
+        series.dataFields.dateX = "date";
+        series.tooltipText = "{value}"
+
+        var series1 = chart.series.push(new am4charts.LineSeries());
+        series1.legendSettings.labelText = "Moving Average";
+        series1.dataFields.valueY = "mav";
+        series1.dataFields.dateX = "date";
+        series1.tooltipText = "{value}"
+
+        series.tooltip.pointerOrientation = "vertical";
+
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.snapToSeries = series;
+        chart.cursor.xAxis = dateAxis;
+
+        chart.legend = new am4charts.Legend();
+        var marker = chart.legend.markers.template.children.getIndex(0);
+        marker.cornerRadius(12, 12, 12, 12);
+        marker.strokeWidth = 2;
+        marker.strokeOpacity = 1;
+        marker.stroke = am4core.color("#ccc");
+
+        //chart.scrollbarY = new am4core.Scrollbar();
+        chart.scrollbarX = new am4core.Scrollbar();
+
+        }); // end am4core.ready()
+        </script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3><a href="/">Hooli Stock Home</a></h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Graph Selection:</p>
+                <li class="active">
+                    <a href="/chart1">Stock Price with Moving Average</a>
+                </li>
+                <li>
+                    <a href="/chart2">Returns Deviation</a>
+                   </li>
+                   <li>
+                    <a href="/chart3">Stock Predictions</a>
+                </li>
+                <!-- <li>
+                    <a href="/chart4">Chart 4</a>
+                </li>
+                <li>
+                    <a href="/chart5">Chart 5</a>
+                </li>
+                <li>
+                    <a href="/chart6">Chart 6</a>
+                </li>
+                <li>
+                    <a href="/chart7">Chart 7</a>
+                </li> -->
+            </ul>
+            <ul class="list-unstyled">
+                <li>
+                    <a href="https://nori-labs.com"><img class="icon" src="static/img/logo-hooli-top.svg" width="200">
+                        <h3 style="font-style: italic;">"I don't know about you people, but I don't want to live in a world where someone else makes the world a better place better than we do."</h3></a>
+                </li>
+            </ul>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div style="position:absolute; bottom:30px; float:none; width:inherit;">
+                            <footer style="position:relative; bottom: 0; height:40px; width: 250px;">
+                                <font color="white">
+          <p style="color: white;">Made with ❤ by <a href="https://www.github.com/repollo">@repollo</a> from <a href="https://www.nori-labs.com">norilabs</a></p>
+          </font>
+                            </footer>
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <form method="POST" action="/data" role="form" id="form" s>
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <label class="sr-only">Enter Stock Symbol</label>
+                                    <input type="text" name="search" placeholder="Eg. aapl" required />
+                                </li>
+                                <li class="nav-item">
+                                    <select name="sourcery">
+                                        <option value="yahoo">Yahoo Finance</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item">
+                                    <script type="text/javascript">
+                                        $(window).load(function() {
+                                            if ($('#start')[0].type != 'date') $('#start').datepicker();
+                                            if ($('#end')[0].type != 'date') $('#end').datepicker();
+                                        });
+                                    </script>
+                                    <label for="start">Start date:</label>
+                                    <input type="date" id="start" name="trip-start" value="{{start}}" min="1970-01-01" max="2019-12-31" required />
+                                    <label for="end">End date:</label>
+                                    <input type="date" id="end" name="trip-end" value="{{end}}" min="1970-01-01" max="2019-12-31" required />
+                                </li>
+                                <li class="nav-item">
+                                    <input type="submit" value="Submit">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+            <h2>{{company}} Stocks Price with The Moving Average (mavg)</h2>
+            <div>
+                <br>
+            <p>This is an interactive view of the data using AmCharts. You can zoom in and play around the graph.</p>
+
+            <div class="line"></div>
+            </div>
+            <div class="centered-element" id="chartdiv" style="width:85%; height:400px;"></div>
+
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
