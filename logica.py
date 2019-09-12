@@ -4,6 +4,7 @@ import datetime
 import math
 import numpy as np
 import pandas_datareader.data as web
+import pickle
 from pandas import Series, DataFrame
 from pandas.plotting import scatter_matrix
 from sklearn import preprocessing
@@ -71,44 +72,109 @@ def task2(data):
 	##################
 	##################
 
+
 	# Linear regression
-	clfreg = LinearRegression(n_jobs=-1)
-	clfreg.fit(X_train, y_train)
+	# clfreg = LinearRegression(n_jobs=-1)
+	# clfreg.fit(X_train, y_train)
+	# 1 - First save the models to local device in models folder
+	filename = 'models/clfreg_model.sav'
+	# pickle.dump(clfreg, open(filename, 'wb'))
+
+	# 2 - load the models from disk onces first instruction is done once.
+	clfreg = pickle.load(open(filename, 'rb'))
+
+
 	# Quadratic Regression 2
-	clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
-	clfpoly2.fit(X_train, y_train)
+	# clfpoly2 = make_pipeline(PolynomialFeatures(2), Ridge())
+	# clfpoly2.fit(X_train, y_train)
+	#Save model to a pickle
+	filename1 = 'models/clfpoly2_model.sav'
+	# pickle.dump(clfpoly2, open(filename1, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfpoly2 = pickle.load(open(filename1, 'rb'))
+
 
 	# Quadratic Regression 3
-	clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
-	clfpoly3.fit(X_train, y_train)
+	# clfpoly3 = make_pipeline(PolynomialFeatures(3), Ridge())
+	# clfpoly3.fit(X_train, y_train)
+	#Save model to a pickle
+	filename2 = 'models/clfpoly3_model.sav'
+	# pickle.dump(clfpoly3, open(filename2, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfpoly3 = pickle.load(open(filename2, 'rb'))
+
 
 	# KNN Regression
-	clfknn = KNeighborsRegressor(n_neighbors=2)
-	clfknn.fit(X_train, y_train)
+	# clfknn = KNeighborsRegressor(n_neighbors=2)
+	# clfknn.fit(X_train, y_train)
+	#Save model to a pickle
+	filename3 = 'models/clfknn_model.sav'
+	# pickle.dump(clfknn, open(filename3, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfknn = pickle.load(open(filename3, 'rb'))
+
 
 	# Lasso Regression
-	clflas = Lasso()
-	clflas.fit(X_train, y_train)
+	# clflas = Lasso()
+	# clflas.fit(X_train, y_train)
+	#Save model to a pickle
+	filename4 = 'models/clflas_model.sav'
+	# pickle.dump(clflas, open(filename4, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clflas = pickle.load(open(filename4, 'rb'))
+
 
 	# Multitask Lasso Regression
 	# clfmtl = MultiTaskLasso(alpha=1.)
 	# clfmtl.fit(X_train, y_train).coef_
 
+
 	# Bayesian Ridge Regression
-	clfbyr = BayesianRidge()
-	clfbyr.fit(X_train, y_train)
+	# clfbyr = BayesianRidge()
+	# clfbyr.fit(X_train, y_train)
+	#Save model to a pickle
+	filename5 = 'models/clfbyr_model.sav'
+	# pickle.dump(clfbyr, open(filename5, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfbyr = pickle.load(open(filename5, 'rb'))
+
 
 	# Lasso LARS Regression
-	clflar = LassoLars(alpha=.1)
-	clflar.fit(X_train, y_train)
+	# clflar = LassoLars(alpha=.1)
+	# clflar.fit(X_train, y_train)
+	#Save model to a pickle
+	filename6 = 'models/clflar_model.sav'
+	# pickle.dump(clflar, open(filename6, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clflar = pickle.load(open(filename6, 'rb'))
+
 
 	# Orthogonal Matching Pursuit Regression
-	clfomp = OrthogonalMatchingPursuit(n_nonzero_coefs=2)
-	clfomp.fit(X_train, y_train)
+	# clfomp = OrthogonalMatchingPursuit(n_nonzero_coefs=2)
+	# clfomp.fit(X_train, y_train)
+	#Save model to a pickle
+	filename7 = 'models/clfomp_model.sav'
+	# pickle.dump(clfomp, open(filename7, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfomp = pickle.load(open(filename7, 'rb'))
+
 
 	# Automatic Relevance Determination Regression
-	clfard = ARDRegression(compute_score=True)
-	clfard.fit(X_train, y_train)
+	# clfard = ARDRegression(compute_score=True)
+	# clfard.fit(X_train, y_train)
+	#Save model to a pickle
+	filename8 = 'models/clfard_model.sav'
+	# pickle.dump(clfard, open(filename8, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfard = pickle.load(open(filename8, 'rb'))
 
 
 	# Logistic Regression
@@ -119,8 +185,17 @@ def task2(data):
 	#   clflgr.fit(X_train, y_train)
 	#   coefs_.append(clflgr.coef_.ravel().copy())
 
-	clfsgd = SGDRegressor(random_state=0, max_iter=1000, tol=1e-3)
-	clfsgd.fit(X_train, y_train)
+
+	#SGD Regression
+	# clfsgd = SGDRegressor(random_state=0, max_iter=1000, tol=1e-3)
+	# clfsgd.fit(X_train, y_train)
+	#Save model to a pickle
+	filename9 = 'models/clfsgd_model.sav'
+	# pickle.dump(clfsgd, open(filename9, 'wb'))
+	
+	# 2 - load the models from disk onces first instruction is done once.
+	clfsgd = pickle.load(open(filename9, 'rb'))
+
 
 	##################
 	##################
