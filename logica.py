@@ -15,6 +15,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.svm import l1_min_c
 
+######DISCLAIMER! THIS VIEW IS HORRIFIC, WATCH WITH YOUR OWN RISK OF BLEEDING EYES AND TURNING EYES BACK!, YOU'VE BEEN WARNED!#######
+
 def task1(df):
 
 	try:

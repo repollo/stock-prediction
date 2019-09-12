@@ -19,7 +19,7 @@ $ flask run
 ## TODO:
 
 #### * Create APIs for data processing instead of running the whole logica app for the data process
-#### * Save the trained models in ONNX or other type of standard
+#### * ~~Save the trained models in ONNX or other type of standard~~ Saved in pickle for now
 #### * Create other views for data analysis
 #### * Make the top bar work correctly, returning the data to the ORIGIN request
 
